@@ -25,6 +25,19 @@ services:
       timeout: 3s
       retries: 5
 
+  lms-mock:
+    build:
+      context: ../../lms-mock
+    ports:
+      - "8001:8001"
+    environment:
+      LMS_API_KEY: lms-dev-mock-key-rsip
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   backend:
     build:
       context: ../../backend
@@ -36,6 +49,8 @@ services:
       REDIS_URL: redis://redis:6379/0
       CELERY_BROKER_URL: redis://redis:6379/1
       CELERY_RESULT_BACKEND: redis://redis:6379/2
+      LMS_API_URL: http://lms-mock:8001
+      LMS_API_KEY: lms-dev-mock-key-rsip
     depends_on:
       postgres:
         condition: service_healthy
@@ -54,6 +69,8 @@ services:
       REDIS_URL: redis://redis:6379/0
       CELERY_BROKER_URL: redis://redis:6379/1
       CELERY_RESULT_BACKEND: redis://redis:6379/2
+      LMS_API_URL: http://lms-mock:8001
+      LMS_API_KEY: lms-dev-mock-key-rsip
     depends_on:
       postgres:
         condition: service_healthy
