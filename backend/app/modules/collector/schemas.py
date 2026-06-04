@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from datetime import datetime
 from enum import Enum
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -24,9 +27,9 @@ class CollectionCriteria(BaseModel):
     max_price: float = Field(gt=0)
     property_types: list[PropertyType] = Field(default_factory=list)
     zip_codes: list[str] = Field(default_factory=list)
-    min_sqft: float | None = None
-    max_sqft: float | None = None
-    min_year_built: int | None = None
+    min_sqft: Optional[float] = None
+    max_sqft: Optional[float] = None
+    min_year_built: Optional[int] = None
 
 
 class PropertyListing(BaseModel):
@@ -37,12 +40,12 @@ class PropertyListing(BaseModel):
     state: str
     zip_code: str
     price: float
-    bedrooms: int | None = None
-    bathrooms: float | None = None
-    sqft: float | None = None
-    year_built: int | None = None
-    property_type: PropertyType | None = None
-    listing_url: str | None = None
+    bedrooms: Optional[int] = None
+    bathrooms: Optional[float] = None
+    sqft: Optional[float] = None
+    year_built: Optional[int] = None
+    property_type: Optional[PropertyType] = None
+    listing_url: Optional[str] = None
     collected_at: datetime = Field(default_factory=datetime.utcnow)
 
 

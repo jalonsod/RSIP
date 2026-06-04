@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import logging
 from abc import ABC, abstractmethod
+from typing import Optional
 
 import httpx
 
@@ -92,7 +95,7 @@ class CrexyAdapter(BaseSourceAdapter):
 class CollectorService:
     """Orchestrates property collection from all configured sources."""
 
-    def __init__(self, adapters: list[BaseSourceAdapter], seen_ids: set[str] | None = None):
+    def __init__(self, adapters: list[BaseSourceAdapter], seen_ids: Optional[set[str]] = None):
         self.adapters = adapters
         # In production this would be backed by Redis for dedup
         self._seen_ids: set[str] = seen_ids or set()
