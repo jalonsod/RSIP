@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import logging
 from abc import ABC, abstractmethod
+from typing import List
 
 import httpx
 
@@ -87,7 +90,7 @@ class ZillowZoneAdapter(BaseZoneAdapter):
 class ZoneLocatorService:
     """Merges zone metrics from all configured adapters."""
 
-    def __init__(self, adapters: list[BaseZoneAdapter]):
+    def __init__(self, adapters: List[BaseZoneAdapter]):
         self.adapters = adapters
 
     async def analyze(self, query: ZoneLocatorQuery) -> ZoneMetrics:

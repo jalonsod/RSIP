@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import Optional
+
 """
 ATDD step definitions for Zone Locator feature.
 Uses pytest-bdd with Gherkin scenarios in features/zone_locator.feature.
@@ -21,7 +24,7 @@ from app.modules.zone_locator.service import BaseZoneAdapter, ZoneLocatorService
 class StubCensusAdapter(BaseZoneAdapter):
     source_name = "census"
 
-    def __init__(self, population: int | None = None, growth: float | None = None, fail: bool = False):
+    def __init__(self, population: Optional[int] = None, growth: Optional[float] = None, fail: bool = False):
         self._population = population
         self._growth = growth
         self._fail = fail
@@ -35,7 +38,7 @@ class StubCensusAdapter(BaseZoneAdapter):
 class StubBLSAdapter(BaseZoneAdapter):
     source_name = "bls"
 
-    def __init__(self, jobs: int | None = None, unemployment: float | None = None, fail: bool = False):
+    def __init__(self, jobs: Optional[int] = None, unemployment: Optional[float] = None, fail: bool = False):
         self._jobs = jobs
         self._unemployment = unemployment
         self._fail = fail
@@ -51,12 +54,12 @@ class StubZillowZoneAdapter(BaseZoneAdapter):
 
     def __init__(
         self,
-        rental_count: int | None = None,
-        avg_rental: float | None = None,
-        days_to_rent: float | None = None,
-        sale_count: int | None = None,
-        avg_sale: float | None = None,
-        days_to_sell: float | None = None,
+        rental_count: Optional[int] = None,
+        avg_rental: Optional[float] = None,
+        days_to_rent: Optional[float] = None,
+        sale_count: Optional[int] = None,
+        avg_sale: Optional[float] = None,
+        days_to_sell: Optional[float] = None,
         fail: bool = False,
     ):
         self._rental_count = rental_count

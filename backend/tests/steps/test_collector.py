@@ -126,13 +126,13 @@ def realtor_adapter(context, count):
 
 
 @when("I run the collector")
-@pytest.mark.asyncio
-async def run_collector(context):
+def run_collector(context):
+    import asyncio
     service = CollectorService(
         adapters=context["adapters"],
         seen_ids=context.get("seen_ids"),
     )
-    context["results"] = await service.run(context["criteria"])
+    context["results"] = asyncio.get_event_loop().run_until_complete(service.run(context["criteria"]))
 
 
 # ---------------------------------------------------------------------------

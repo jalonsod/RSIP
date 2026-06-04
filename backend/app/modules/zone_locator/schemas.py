@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import List, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -9,19 +13,19 @@ class ZoneLocatorQuery(BaseModel):
 class ZoneMetrics(BaseModel):
     zip_code: str
     # Population & growth
-    population: int | None = None
-    population_growth_pct: float | None = None  # year-over-year %
+    population: Optional[int] = None
+    population_growth_pct: Optional[float] = None  # year-over-year %
     # Employment
-    jobs_by_radius: int | None = None
-    unemployment_rate_pct: float | None = None
+    jobs_by_radius: Optional[int] = None
+    unemployment_rate_pct: Optional[float] = None
     # Rental market
-    rental_availability_count: int | None = None
-    avg_rental_price: float | None = None
-    days_to_rent: float | None = None
+    rental_availability_count: Optional[int] = None
+    avg_rental_price: Optional[float] = None
+    days_to_rent: Optional[float] = None
     # Sale market
-    sale_availability_count: int | None = None
-    avg_sale_price: float | None = None
-    days_to_sell: float | None = None
+    sale_availability_count: Optional[int] = None
+    avg_sale_price: Optional[float] = None
+    days_to_sell: Optional[float] = None
     # Metadata
-    data_sources: list[str] = Field(default_factory=list)
-    errors: list[str] = Field(default_factory=list)
+    data_sources: List[str] = Field(default_factory=list)
+    errors: List[str] = Field(default_factory=list)

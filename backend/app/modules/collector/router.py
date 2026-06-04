@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from fastapi import APIRouter, HTTPException
 
 from app.modules.collector.schemas import CollectionCriteria, CollectionRunResult
@@ -5,7 +9,7 @@ from app.modules.collector.schemas import CollectionCriteria, CollectionRunResul
 router = APIRouter()
 
 # In-memory criteria store (replace with DB in production)
-_current_criteria: CollectionCriteria | None = None
+_current_criteria: Optional[CollectionCriteria] = None
 
 
 @router.get("/criteria", response_model=CollectionCriteria)

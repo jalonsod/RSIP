@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import logging
 from abc import ABC, abstractmethod
+from typing import List, Optional, Set
 
 import httpx
 
@@ -19,7 +22,7 @@ class BaseSourceAdapter(ABC):
     source: DataSource
 
     @abstractmethod
-    async def fetch(self, criteria: CollectionCriteria) -> list[PropertyListing]:
+    async def fetch(self, criteria: CollectionCriteria) -> List[PropertyListing]:
         """Fetch property listings matching the given criteria."""
         ...
 
@@ -31,7 +34,7 @@ class ZillowAdapter(BaseSourceAdapter):
         self.api_key = api_key
         self.client = httpx.AsyncClient(timeout=30.0)
 
-    async def fetch(self, criteria: CollectionCriteria) -> list[PropertyListing]:
+    async def fetch(self, criteria: CollectionCriteria) -> List[PropertyListing]:
         # TODO: Implement Zillow RapidAPI integration
         logger.info("ZillowAdapter.fetch called (stub)")
         return []
@@ -47,7 +50,7 @@ class RealtorAdapter(BaseSourceAdapter):
         self.api_key = api_key
         self.client = httpx.AsyncClient(timeout=30.0)
 
-    async def fetch(self, criteria: CollectionCriteria) -> list[PropertyListing]:
+    async def fetch(self, criteria: CollectionCriteria) -> List[PropertyListing]:
         # TODO: Implement Realtor.com API integration
         logger.info("RealtorAdapter.fetch called (stub)")
         return []
@@ -64,7 +67,7 @@ class LMSAdapter(BaseSourceAdapter):
         self.api_key = api_key
         self.client = httpx.AsyncClient(base_url=api_url, timeout=30.0)
 
-    async def fetch(self, criteria: CollectionCriteria) -> list[PropertyListing]:
+    async def fetch(self, criteria: CollectionCriteria) -> List[PropertyListing]:
         # TODO: Implement LMS internal API integration
         logger.info("LMSAdapter.fetch called (stub)")
         return []
@@ -80,7 +83,7 @@ class CrexyAdapter(BaseSourceAdapter):
         self.api_key = api_key
         self.client = httpx.AsyncClient(timeout=30.0)
 
-    async def fetch(self, criteria: CollectionCriteria) -> list[PropertyListing]:
+    async def fetch(self, criteria: CollectionCriteria) -> List[PropertyListing]:
         # TODO: Implement Crexy API integration
         logger.info("CrexyAdapter.fetch called (stub)")
         return []
@@ -92,10 +95,10 @@ class CrexyAdapter(BaseSourceAdapter):
 class CollectorService:
     """Orchestrates property collection from all configured sources."""
 
-    def __init__(self, adapters: list[BaseSourceAdapter], seen_ids: set[str] | None = None):
+    def __init__(self, adapters: List[BaseSourceAdapter], seen_ids: Optional[Set[str]] = None):
         self.adapters = adapters
         # In production this would be backed by Redis for dedup
-        self._seen_ids: set[str] = seen_ids or set()
+        self._seen_ids: Set[str] = seen_ids or set()
 
     def _make_dedup_key(self, listing: PropertyListing) -> str:
         return f"{listing.source}:{listing.external_id}"
@@ -106,7 +109,7 @@ class CollectorService:
     def _mark_seen(self, listing: PropertyListing) -> None:
         self._seen_ids.add(self._make_dedup_key(listing))
 
-    async def run(self, criteria: CollectionCriteria) -> list[CollectionRunResult]:
+    async def run(self, criteria: CollectionCriteria) -> List[CollectionRunResult]:
         results = []
         for adapter in self.adapters:
             result = CollectionRunResult(
