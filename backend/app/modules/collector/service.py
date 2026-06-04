@@ -206,10 +206,8 @@ class CollectorService:
                         result.properties_skipped += 1
                     else:
                         self._mark_seen(listing)
-                        if await self._persist_listing(listing):
-                            result.properties_new += 1
-                        else:
-                            result.properties_skipped += 1
+                        result.properties_new += 1
+                        await self._persist_listing(listing)
             except Exception as e:
                 logger.exception("Error collecting from %s", adapter.source)
                 result.errors.append(str(e))
