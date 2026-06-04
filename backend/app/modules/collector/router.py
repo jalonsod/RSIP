@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.database import get_db
 from app.modules.collector.schemas import CollectionCriteria, CollectionRunResult
 
 router = APIRouter()
@@ -23,7 +25,7 @@ async def update_criteria(criteria: CollectionCriteria):
 
 
 @router.post("/run", response_model=list[CollectionRunResult])
-async def run_collection():
+async def run_collection(db: AsyncSession = Depends(get_db)):
     if _current_criteria is None:
         raise HTTPException(status_code=400, detail="Collection criteria not configured")
     # TODO: trigger Celery task instead of inline
@@ -42,5 +44,5 @@ async def run_collection():
         LMSAdapter(api_url=settings.lms_api_url, api_key=settings.lms_api_key),
         CrexyAdapter(api_key=settings.crexy_api_key),
     ]
-    service = CollectorService(adapters=adapters)
+    service = CollectorService(adapters=adapters, session=db)
     return await service.run(_current_criteria)
