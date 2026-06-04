@@ -28,6 +28,8 @@ class Settings(BaseSettings):
     lms_api_url: str = ""
     lms_api_key: str = ""
     crexy_api_key: str = ""
+    census_api_key: str = ""
+    bls_api_key: str = ""
 
     # CORS
     allowed_origins: list[str] = ["http://localhost:3000"]
